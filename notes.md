@@ -1,0 +1,42 @@
+# notes on the making of monsweeper
+
+- this is tricky!
+- modeling a text-based game as a visual one
+- N.B. children created by a list in JSX must have a key property
+- N.B. inline styling in JSX isn't one-to-one with HTML
+- my plan is as such:
+    - render a 3x3 grid, hardcoded size for now
+    - each cell in the grid either has an electrode or doesnt
+    - undecided how i'll handle the battle sequence
+        - can go the new page route
+        - or can do a modal
+    - there is a dpad at the bottom
+- setting up the grid was a pain but i did it
+    - i had to do everything within the useState callback function
+    - i cant use useEffect because eslint doesnt like it
+        - i was referencing the grid state variable
+    - state is managed in the grid and not the individual cells
+        - which makes sense now that i think about it
+        - single source of truth ... single source of truth
+- what comes next is setting up the player and implementing movement
+- i imagine that i will need a wrapper component (called game or something)
+  that manages state that can be passed between the controller and the grid
+    - i also need to figure out what it means to be a player
+    - and where the player starts
+        - does the user get to decide or is it random
+- the buttons are done now
+    - i need to now translate that to something visual
+    - how do i represent the user visually? how do i represent the electrodes (once found)?
+        - going to start by bundling in a boolean variable in for the cell
+            - this will denote user presence
+            - will make it easy to check for battle conditions too
+        - cell is disjoint from turn
+            - the current space is linked to a cell's space
+- stumped trying to link user presence based on the current space
+    - the useEffect is tricky stuff!
+    - the solution was to create a new object at the second level
+        - this is what i was doing for the turn operations too
+        - i didn't know that you could do that in js
+        - essentially, you create a new object using a spread operator, then can override values
+            - in this case, i wanted to override with the value of the userPresent property
+            - i end up overriding all of the properties, but only one should change
