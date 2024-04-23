@@ -28,10 +28,16 @@ type Direction = {
   fn: () => void;
 };
 
+function User() {
+  return <div>🙂</div>;
+}
+
 function Grass(props: Cell) {
   return (
     <>
-      <span>{props.space}</span>
+      <span>
+        {props.userPresent ? (<User />) : props.space}
+      </span>
     </>
   );
 }
@@ -42,9 +48,9 @@ function Grid(props: GridProps) {
 
   return (
     <>
-      <div className='grasses'>
+      <div>
         {props.grid.map((row, rind) => (
-          <div key={rind}>
+          <div className="grasses" key={rind}>
             {row.map((cell, cind) => (
               <Grass
                 key={`${rind}-${cind}`}
@@ -61,12 +67,9 @@ function Grid(props: GridProps) {
 }
 
 function DirButton(props: Direction) {
-  function move() {
-    props.fn;
-  }
   return (
     <>
-      <button onClick={() => move()}>{props.direction}</button>
+      <button onClick={() => props.fn()}>{props.direction}</button>
     </>
   );
 }
@@ -125,13 +128,18 @@ function Game() {
     for(let i=0; i<gsize; i++) {
       arr[i] = Array(gsize);
       for(let j=0; j<gsize; j++) {
-        arr[i][j] = {
-          space: (i*3)+j+1,
-          electrode: false,
-          userPresent: false
-        };
         if(i === 0 && j === 0) {
-          arr[i][j].userPresent = true;
+          arr[i][j] = {
+            space: (i*3)+j+1,
+            electrode: false,
+            userPresent: true
+          };
+        } else {
+          arr[i][j] = {
+            space: (i*3)+j+1,
+            electrode: false,
+            userPresent: false
+          };
         }
       }
     }
@@ -152,9 +160,9 @@ function Game() {
   useEffect(() => {
     setGrid(cgrid => Array.from(cgrid).map(row => row.map(cell => ({
       ...cell,
-      userPresent: cell.space === userTurn.currentSpace
+      userPresent: cell.space - 1 === userTurn.currentSpace
     }))));
-  }, [userTurn.currentSpace]);
+  }, [userTurn]);
 
   return (
     <>
