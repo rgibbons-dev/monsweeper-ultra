@@ -40,3 +40,7 @@
         - essentially, you create a new object using a spread operator, then can override values
             - in this case, i wanted to override with the value of the userPresent property
             - i end up overriding all of the properties, but only one should change
+- i got user movement working
+    - what happened was that userPresent was always false
+    - this was because i was comparing current space and the cell space
+    - cell space was incremented by one for display purposes, so i needed to handle that in the conditional
