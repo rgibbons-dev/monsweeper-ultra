@@ -1,9 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import './App.css'
 
+type Move = {
+  name: string,
+  damage: number
+};
+
 type Mon = {
   name: string;
-  moves: string[];
+  moves: Move[];
   hp: number;
   buff: boolean;
 };
@@ -69,7 +74,7 @@ function Grid(props: GridProps) {
 function DirButton(props: Direction) {
   return (
     <>
-      <button onClick={() => props.fn()}>{props.direction}</button>
+      <button className='dirButton' onClick={() => props.fn()}>{props.direction}</button>
     </>
   );
 }
@@ -100,10 +105,18 @@ function Dpad(props: DpadProps) {
 
   return (
     <>
-      <DirButton direction={'left'} fn={left}/>
-      <DirButton direction={'right'} fn={right}/>
-      <DirButton direction={'up'} fn={up}/>
-      <DirButton direction={'down'} fn={down}/>
+      <div className='controller'>
+        <div>
+          <DirButton direction={'up'} fn={up}/>
+        </div>
+        <div>
+          <DirButton direction={'left'} fn={left}/>
+          <DirButton direction={'right'} fn={right}/>
+        </div>
+        <div>
+          <DirButton direction={'down'} fn={down}/>
+        </div>
+      </div>
     </>
   );
 }
@@ -111,7 +124,16 @@ function Dpad(props: DpadProps) {
 function Game() {
   const pikachu: Mon = {
     name: 'Pikachu',
-    moves: ['Thunderbolt', 'Protect'],
+    moves: [
+      {
+        name: 'Thunderbolt',
+        damage: 80 
+      },
+      {
+        name: 'Protect',
+        damage: 0
+      }
+    ],
     hp: 200,
     buff: false
   };

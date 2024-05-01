@@ -17,3 +17,12 @@ span {
   display: flex;
   justify-content: space-between;
 }
+
+.controller {
+  display: flex;
+  flex-direction: column;
+}
+
+.dirButton {
+  background-color: red;
+}
