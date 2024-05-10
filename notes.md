@@ -44,3 +44,20 @@
     - what happened was that userPresent was always false
     - this was because i was comparing current space and the cell space
     - cell space was incremented by one for display purposes, so i needed to handle that in the conditional
+- now working on doing user movement via the arrow keys
+    - onKeyDown property requires lots of useCallbacks
+        - what does useCallback do?
+        - useCallback memoizes the callback and is only triggered if the inputs change
+            - memoization: performance optimization? recall DSA
+                - skip re-rendering if the props are unchanged
+    - tabIndex of 0 focuses in on the controller
+- implementing the battle sequence
+    - for now i will just have it in a box somewhere on the same page
+        - can do more complex stuff later
+    - useState hook to manage the battle being triggered
+        - start battle from a useEffect
+            - when current space changes
+            - condition when current space contains an electrode
+        - end battle ??
+            - can do it in a while loop
+            - how do i manage whose turn it is?

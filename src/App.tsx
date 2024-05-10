@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, KeyboardEvent, SetStateAction, useCallback, useEffect, useState } from 'react';
 import './App.css'
 
 type Move = {
@@ -87,25 +87,49 @@ type DpadProps = {
 function Dpad(props: DpadProps) {
   const turn = props.userTurn;
   const cs = turn.currentSpace;
-  function left() {
-    props.setUserTurn({...turn, currentSpace: cs - 1});
-  }
   
-  function right() {
-    props.setUserTurn({...turn, currentSpace: cs + 1});
-  }
-  
-  function up() {
-    props.setUserTurn({...turn, currentSpace: cs - 3});
-  }
-  
-  function down() {
-    props.setUserTurn({...turn, currentSpace: cs + 3});
-  }
+  const left = useCallback(() => {
+    props.setUserTurn({ ...turn, currentSpace: cs - 1 });
+  }, [cs, props, turn]);
+
+  const right = useCallback(() => {
+    props.setUserTurn({ ...turn, currentSpace: cs + 1 });
+  }, [cs, props, turn]);
+
+  const up = useCallback(() => {
+    props.setUserTurn({ ...turn, currentSpace: cs - 3 });
+  }, [cs, props, turn]);
+
+  const down = useCallback(() => {
+    props.setUserTurn({ ...turn, currentSpace: cs + 3 });
+  }, [cs, props, turn]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      switch (event.key) {
+        case 'ArrowLeft':
+          left();
+          break;
+        case 'ArrowRight':
+          right();
+          break;
+        case 'ArrowUp':
+          up();
+          break;
+        case 'ArrowDown':
+          down();
+          break;
+        default:
+          break;
+      }
+    },
+    [left, right, up, down]
+  );
 
   return (
     <>
-      <div className='controller'>
+      <div className='controller' onKeyDown={handleKeyDown} tabIndex={0}>
+        <div>click here to focus</div>
         <div>
           <DirButton direction={'up'} fn={up}/>
         </div>
@@ -117,6 +141,19 @@ function Dpad(props: DpadProps) {
           <DirButton direction={'down'} fn={down}/>
         </div>
       </div>
+    </>
+  );
+}
+
+type BattleProps = {
+  go: boolean;
+};
+
+function Battle(props: BattleProps) {
+  const msg = props.go ? 'Battle' : 'Ok';
+  return (
+    <>
+      <div>{msg}</div>
     </>
   );
 }
@@ -138,6 +175,7 @@ function Game() {
     buff: false
   };
   const [userTurn, setUserTurn] = useState<Turn>({ pika: pikachu, currentSpace: 0});
+  const [isBattleStarted, setIsBattleStarted] = useState(false);
 
   const gsize = 3;
 
@@ -179,6 +217,7 @@ function Game() {
     return arr;
   });
 
+  // move the user
   useEffect(() => {
     setGrid(cgrid => Array.from(cgrid).map(row => row.map(cell => ({
       ...cell,
@@ -186,8 +225,19 @@ function Game() {
     }))));
   }, [userTurn]);
 
+  // check if a battle should be started or not
+  useEffect(() => {
+    grid.forEach(row => {
+      const found = row.find(cell => cell.userPresent && cell.electrode)
+      if(found !== undefined) {
+        setIsBattleStarted(true);
+      }
+    });
+  }, [grid]);
+
   return (
     <>
+      <Battle go={isBattleStarted} />
       <Grid grid={grid}/>
       <Dpad userTurn={userTurn} setUserTurn={setUserTurn}/>
     </>
