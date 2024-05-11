@@ -67,3 +67,6 @@
             - can do it in a while loop
             - how do i manage whose turn it is?
 - before i go any further i'm going to break components into files now
+- what should go into the global state?
+    1. the grid
+    1. the battle trigger

@@ -3,6 +3,7 @@ import { Mon, Turn, Cell } from "../types";
 import Battle from "./Battle";
 import Dpad from "./Dpad";
 import Grid from "./Grid";
+import { useBattleStore } from "../store";
 
 function Game() {
     const pikachu: Mon = {
@@ -77,6 +78,7 @@ function Game() {
             const found = row.find(cell => cell.userPresent && cell.electrode)
             if (found !== undefined) {
                 setIsBattleStarted(true);
+                //useBattleStore((state) => state.begin)
             }
         });
     }, [grid]);
