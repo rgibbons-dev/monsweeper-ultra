@@ -58,6 +58,12 @@
         - start battle from a useEffect
             - when current space changes
             - condition when current space contains an electrode
+            - i probably want to route to a different page
+                - going to use wouter because it isn't as featureful
+                    - though react-router and tanstack-router seem to be more prevalent
+                - makes sense because i don't want to see the grid
+                    - but the state of the grid must be maintained (zustand?)
         - end battle ??
             - can do it in a while loop
             - how do i manage whose turn it is?
+- before i go any further i'm going to break components into files now
