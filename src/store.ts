@@ -48,9 +48,11 @@ function locate(grid: Cell[][], turn: Turn) {
     })))
 }
 
+type GridWrapper = { grid: Cell[][]; }
+
 const useGridStore = create((set) => ({
     grid: gen(),
-    userMoved: (turn: Turn) => set((state) => ({ grid: locate(state.grid, turn) }))
+    userMoved: (turn: Turn) => set((state: GridWrapper) => ({ grid: locate(state.grid, turn) }))
 }));
 
 const pikachu: Mon = {
@@ -71,7 +73,7 @@ const pikachu: Mon = {
 
 const useUserTurnStore = create((set) => ({
     turn: { pika: pikachu, currentSpace: 0 },
-    move: (distance: number) => set((state) => ({ turn: state.currentSpace + distance }))
+    move: (distance: number) => set((state: Turn) => ({ turn: state.currentSpace + distance }))
 }));
 
 const useBattleStore = create((set) => ({

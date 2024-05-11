@@ -70,3 +70,4 @@
 - what should go into the global state?
     1. the grid
     1. the battle trigger
+    1. the user turn
