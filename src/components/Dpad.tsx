@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useCallback, KeyboardEvent } from "react";
 import { Turn } from "../types";
+import { useUserTurnStore } from "../store";
 
 type Direction = {
     direction: 'left' | 'right' | 'up' | 'down';
@@ -23,9 +24,7 @@ function Dpad(props: DpadProps) {
     const turn = props.userTurn;
     const cs = turn.currentSpace;
 
-    const left = useCallback(() => {
-        props.setUserTurn({ ...turn, currentSpace: cs - 1 });
-    }, [cs, props, turn]);
+    const moveUser = useUserTurnStore(state => state.move);
 
     const right = useCallback(() => {
         props.setUserTurn({ ...turn, currentSpace: cs + 1 });
@@ -36,6 +35,7 @@ function Dpad(props: DpadProps) {
     }, [cs, props, turn]);
 
     const down = useCallback(() => {
+
         props.setUserTurn({ ...turn, currentSpace: cs + 3 });
     }, [cs, props, turn]);
 
@@ -43,7 +43,7 @@ function Dpad(props: DpadProps) {
         (event: KeyboardEvent<HTMLDivElement>) => {
             switch (event.key) {
                 case 'ArrowLeft':
-                    left();
+                    moveUser(-1);
                     break;
                 case 'ArrowRight':
                     right();
@@ -58,7 +58,7 @@ function Dpad(props: DpadProps) {
                     break;
             }
         },
-        [left, right, up, down]
+        [moveUser, right, up, down]
     );
 
     return (
@@ -69,7 +69,7 @@ function Dpad(props: DpadProps) {
                     <DirButton direction={'up'} fn={up} />
                 </div>
                 <div>
-                    <DirButton direction={'left'} fn={left} />
+                    <DirButton direction={'left'} fn={right} />
                     <DirButton direction={'right'} fn={right} />
                 </div>
                 <div>

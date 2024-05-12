@@ -72,16 +72,17 @@ function Game() {
         }))));
     }, [userTurn]);
 
+    const startBattle = useBattleStore(state => state.begin);
+
     // check if a battle should be started or not
     useEffect(() => {
         grid.forEach(row => {
             const found = row.find(cell => cell.userPresent && cell.electrode)
             if (found !== undefined) {
-                setIsBattleStarted(true);
-                //useBattleStore((state) => state.begin)
+                startBattle();
             }
         });
-    }, [grid]);
+    }, [grid, startBattle]);
 
     return (
         <>

@@ -71,12 +71,23 @@ const pikachu: Mon = {
     buff: false
 };
 
-const useUserTurnStore = create((set) => ({
+type UserTurnState = {
+    turn: Turn;
+    move: (d: number) => void;
+};
+
+const useUserTurnStore = create<UserTurnState>((set) => ({
     turn: { pika: pikachu, currentSpace: 0 },
-    move: (distance: number) => set((state: Turn) => ({ turn: state.currentSpace + distance }))
+    move: (distance: number) => set((state) => ({ turn: { ...state.turn, currentSpace: state.turn.currentSpace + distance } }))
 }));
 
-const useBattleStore = create((set) => ({
+type BattleState = {
+    started: boolean;
+    begin: () => void;
+    end: () => void;
+};
+
+const useBattleStore = create<BattleState>((set) => ({
     started: false,
     begin: () => set(() => ({ started: true })),
     end: () => set(() => ({ started: false }))
