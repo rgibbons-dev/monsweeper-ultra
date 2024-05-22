@@ -71,3 +71,5 @@
     1. the grid
     1. the battle trigger
     1. the user turn
+- be wary of grid state property taking a function as value
+    - does the function get applied every time state is accessed?
