@@ -1,80 +1,33 @@
-import { Dispatch, SetStateAction, useCallback, KeyboardEvent } from "react";
-import { Turn } from "../types";
-import { useUserTurnStore } from "../store";
+import { KeyboardEvent } from "react";
+import { useTurnStore } from "../store";
 
-type Direction = {
-    direction: 'left' | 'right' | 'up' | 'down';
-    fn: () => void;
-};
+function Dpad() {
 
-function DirButton(props: Direction) {
-    return (
-        <>
-            <button className='dirButton' onClick={() => props.fn()}>{props.direction}</button>
-        </>
-    );
-}
+    const moveUser = useTurnStore(state => state.move);
 
-type DpadProps = {
-    userTurn: Turn;
-    setUserTurn: Dispatch<SetStateAction<Turn>>;
-};
-
-function Dpad(props: DpadProps) {
-    const turn = props.userTurn;
-    const cs = turn.currentSpace;
-
-    const moveUser = useUserTurnStore(state => state.move);
-
-    const right = useCallback(() => {
-        props.setUserTurn({ ...turn, currentSpace: cs + 1 });
-    }, [cs, props, turn]);
-
-    const up = useCallback(() => {
-        props.setUserTurn({ ...turn, currentSpace: cs - 3 });
-    }, [cs, props, turn]);
-
-    const down = useCallback(() => {
-
-        props.setUserTurn({ ...turn, currentSpace: cs + 3 });
-    }, [cs, props, turn]);
-
-    const handleKeyDown = useCallback(
-        (event: KeyboardEvent<HTMLDivElement>) => {
-            switch (event.key) {
-                case 'ArrowLeft':
-                    moveUser(-1);
-                    break;
-                case 'ArrowRight':
-                    right();
-                    break;
-                case 'ArrowUp':
-                    up();
-                    break;
-                case 'ArrowDown':
-                    down();
-                    break;
-                default:
-                    break;
-            }
-        },
-        [moveUser, right, up, down]
-    );
+    const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        switch (event.key) {
+            case 'ArrowLeft':
+                moveUser(-1);
+                break;
+            case 'ArrowRight':
+                moveUser(1);
+                break;
+            case 'ArrowUp':
+                moveUser(-3);
+                break;
+            case 'ArrowDown':
+                moveUser(3);
+                break;
+            default:
+                break;
+        }
+    };
 
     return (
         <>
             <div className='controller' onKeyDown={handleKeyDown} tabIndex={0}>
-                <div>click here to focus</div>
-                <div>
-                    <DirButton direction={'up'} fn={up} />
-                </div>
-                <div>
-                    <DirButton direction={'left'} fn={right} />
-                    <DirButton direction={'right'} fn={right} />
-                </div>
-                <div>
-                    <DirButton direction={'down'} fn={down} />
-                </div>
+                <div className='dirButton'>click here to focus</div>
             </div>
         </>
     );

@@ -42,17 +42,23 @@ function gen() {
 }
 
 function locate(grid: Cell[][], turn: Turn) {
-    Array.from(grid).map(row => row.map(cell => ({
+    return Array.from(grid).map(row => row.map(cell => ({
         ...cell,
         userPresent: cell.space - 1 === turn.currentSpace
     })))
 }
 
-type GridWrapper = { grid: Cell[][]; }
+type GridState = {
+    grid: Cell[][];
+};
 
-const useGridStore = create((set) => ({
+type GridAction = {
+    userMoved: (t: Turn) => void;
+};
+
+const useGridStore = create<GridState & GridAction>((set) => ({
     grid: gen(),
-    userMoved: (turn: Turn) => set((state: GridWrapper) => ({ grid: locate(state.grid, turn) }))
+    userMoved: (turn: Turn) => set((state) => ({ grid: locate(state.grid, turn) }))
 }));
 
 const pikachu: Mon = {
@@ -71,26 +77,32 @@ const pikachu: Mon = {
     buff: false
 };
 
-type UserTurnState = {
+type TurnState = {
     turn: Turn;
+};
+
+type TurnAction = {
     move: (d: number) => void;
 };
 
-const useUserTurnStore = create<UserTurnState>((set) => ({
+const useTurnStore = create<TurnState & TurnAction>((set) => ({
     turn: { pika: pikachu, currentSpace: 0 },
     move: (distance: number) => set((state) => ({ turn: { ...state.turn, currentSpace: state.turn.currentSpace + distance } }))
 }));
 
 type BattleState = {
     started: boolean;
+};
+
+type BattleAction = {
     begin: () => void;
     end: () => void;
 };
 
-const useBattleStore = create<BattleState>((set) => ({
+const useBattleStore = create<BattleState & BattleAction>((set) => ({
     started: false,
     begin: () => set(() => ({ started: true })),
     end: () => set(() => ({ started: false }))
 }));
 
-export { useBattleStore, useGridStore, useUserTurnStore }
+export { useBattleStore, useGridStore, useTurnStore }

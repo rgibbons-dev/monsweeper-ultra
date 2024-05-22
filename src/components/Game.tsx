@@ -88,7 +88,7 @@ function Game() {
         <>
             <Battle go={isBattleStarted} />
             <Grid grid={grid} />
-            <Dpad userTurn={userTurn} setUserTurn={setUserTurn} />
+            <Dpad />
         </>
     );
 }
