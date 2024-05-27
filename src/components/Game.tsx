@@ -3,6 +3,7 @@ import Battle from "./Battle";
 import Dpad from "./Dpad";
 import Grid from "./Grid";
 import { useBattleStore, useGridStore, useTurnStore } from "../store";
+import { Route, useLocation } from "wouter";
 
 function Game() {
 
@@ -16,8 +17,10 @@ function Game() {
     }, [userMoved, userTurn]);
 
     const isBattleStarted = useBattleStore(state => state.started);
-    const startBattle = useBattleStore(state => state.begin);
-    const endBattle = useBattleStore(state => state.end);
+    const battleStart = useBattleStore(state => state.begin);
+    const battleEnd = useBattleStore(state => state.end);
+
+    const [location, setLocation] = useLocation();
     
 
     // check if a battle should be started or not
@@ -25,21 +28,26 @@ function Game() {
         for(const row of grid) {
             const found = row.find(cell => cell.userPresent && cell.electrode)
             if (found !== undefined) {
-                startBattle();
+                battleStart();
+                setLocation("/battle");
                 break;
             }
             // temporary
             else {
-                endBattle();
+                battleEnd();
             }
         }
-    }, [grid, startBattle, endBattle]);
+    }, [grid, battleStart, battleEnd, setLocation]);
 
     return (
         <>
-            <Battle go={isBattleStarted} />
-            <Grid grid={grid} />
-            <Dpad />
+            <Route path="/battle">
+                <Battle go={isBattleStarted} return={setLocation} />
+            </Route>
+            <Route path="/">
+                <Grid grid={grid} />
+                <Dpad />
+            </Route>
         </>
     );
 }

@@ -45,7 +45,14 @@ function locate(grid: Cell[][], turn: Turn) {
     return Array.from(grid).map(row => row.map(cell => ({
         ...cell,
         userPresent: cell.space - 1 === turn.currentSpace
-    })))
+    })));
+}
+
+function removeElectrode(grid: Cell[][], turn: Turn) {
+    return Array.from(grid).map(row => row.map(cell => ({
+        ...cell,
+        electrode: cell.space - 1 === turn.currentSpace ? false : cell.electrode
+    })));
 }
 
 type GridState = {
@@ -53,12 +60,14 @@ type GridState = {
 };
 
 type GridAction = {
-    userMoved: (t: Turn) => void;
+    userMoved: (turn: Turn) => void;
+    battleWon: (turn: Turn) => void;
 };
 
 const useGridStore = create<GridState & GridAction>((set) => ({
     grid: gen(),
-    userMoved: (turn: Turn) => set((state) => ({ grid: locate(state.grid, turn) }))
+    userMoved: (turn: Turn) => set((state) => ({ grid: locate(state.grid, turn) })),
+    battleWon: (turn: Turn) => set((state) => ({ grid: removeElectrode(state.grid, turn) }))
 }));
 
 const pikachu: Mon = {
