@@ -16,14 +16,31 @@ function home(turn: Turn, post: (turn: Turn) => void, route: (to: string) => voi
 }
 
 function Battle(props: BattleProps) {
+    const electrode: Mon = {
+        name: "electrode",
+        hp: 200,
+        moves: [
+            {
+                name: "Tackle",
+                damage: 40
+            }
+        ],
+        buff: false
+    };
     const msg = props.go ? 'Battle' : 'Ok';
     const battleWon = useGridStore(state => state.battleWon);
     const turn = useTurnStore(state => state.turn);
     const callHome = () => home(turn, battleWon, props.return);
     return (
         <>
-            <div>{msg}</div>
-            <button onClick={callHome}>Battle ended</button>
+            <div>
+                <div>{msg}</div>
+                <button onClick={callHome}>Battle ended</button>
+            </div>
+            <div>
+                <button>Thunderbolt</button>
+                <button>Protect</button>
+            </div>
         </>
     );
 }
