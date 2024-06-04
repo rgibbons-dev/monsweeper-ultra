@@ -73,3 +73,10 @@
     1. the user turn
 - be wary of grid state property taking a function as value
     - does the function get applied every time state is accessed?
+- working on battle sequence now
+    - seems like the battle component might need a child component
+    - for the move buttons
+    - because i'm passing four parameters to it
+    - i'm consolidating the player and cpu turns into one function
+        - in the elixir version, the battle sequence was a recursive fn
+        - that was my original plan here, but i couldn't figure it out with react
