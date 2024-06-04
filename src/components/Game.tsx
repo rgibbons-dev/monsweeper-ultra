@@ -18,8 +18,6 @@ function Game() {
 
     const isBattleStarted = useBattleStore(state => state.started);
     const battleStart = useBattleStore(state => state.begin);
-    const battleEnd = useBattleStore(state => state.end);
-
     const [location, setLocation] = useLocation();
     
 
@@ -32,12 +30,8 @@ function Game() {
                 setLocation("/battle");
                 break;
             }
-            // temporary
-            else {
-                battleEnd();
-            }
         }
-    }, [grid, battleStart, battleEnd, setLocation]);
+    }, [grid, battleStart, setLocation]);
 
     return (
         <>

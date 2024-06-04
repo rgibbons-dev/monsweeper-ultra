@@ -7,7 +7,7 @@ type BattleProps = {
 };
 
 function hurt(mon: Mon, dmg: number) {
-    // TODO: account for buff (protect)
+    if(mon.buff) return mon;
     return { ...mon, hp: mon.hp -= dmg};
 }
 
@@ -52,15 +52,22 @@ function battleSeq(cur: 'player' | 'cpu', pikachu: Mon, electrode: Mon) {
 
 function playerTurn(pikachu: Mon, electrode: Mon) {
     const move = pikachu.moves[0];
+    console.log(move.name);
+    const handler = () => console.log('clicked');
+    const m0 = document.getElementById('move-0');
+    m0?.addEventListener("click", handler);
+    const m1 = document.getElementById('move-1');
+    m1?.addEventListener("click", handler);
     const eDamaged = hurt(electrode, move.damage);
-    // TODO: add guard here
+    if(eDamaged.hp < 0) return;
     battleSeq('cpu', pikachu, eDamaged);
 }
 
 function cpuTurn(pikachu: Mon, electrode: Mon) {
     const move = electrode.moves[Math.random()];
+    console.log(move.name);
     const pDamaged = hurt(pikachu, move.damage);
-    // TODO add guard here
+    if(pDamaged.hp <= 0) return;
     battleSeq('player', pDamaged, electrode);
 }
 
@@ -79,8 +86,8 @@ function Battle(props: BattleProps) {
                 <button onClick={staging}>start battle</button>
             </div>
             <div>
-                <button>Thunderbolt</button>
-                <button>Protect</button>
+                <button id='move-0'>Thunderbolt</button>
+                <button id='move-1'>Protect</button>
             </div>
         </>
     );
