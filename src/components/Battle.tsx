@@ -16,7 +16,7 @@ function home(turn: Turn, post: (turn: Turn) => void, route: (to: string) => voi
     route("/");
 }
 
-const staging = () => {
+function staging(pikachu: Mon, end: () => void) {
     const electrode: Mon = {
         name: "electrode",
         hp: 200,
@@ -28,11 +28,9 @@ const staging = () => {
         ],
         buff: false
     };
-    const pikachu = useTurnStore(state => state.turn.pika);
-    const battleEnd = useBattleStore(state => state.end);
     const cur = 'player';
     battleSeq(cur, pikachu, electrode);
-    battleEnd();
+    end();
     // TODO: ensure pikachu state gets updated in turn store
 }
 
@@ -50,15 +48,17 @@ function battleSeq(cur: 'player' | 'cpu', pikachu: Mon, electrode: Mon) {
     }
 }
 
+let playerChoose: number;
+
+const moveZero = () => playerChoose = 0;
+const moveOne = () => playerChoose = 1;
+
 function playerTurn(pikachu: Mon, electrode: Mon) {
-    const move = pikachu.moves[0];
+    while(playerChoose === -1) {}
+    const move = pikachu.moves[playerChoose];
     console.log(move.name);
-    const handler = () => console.log('clicked');
-    const m0 = document.getElementById('move-0');
-    m0?.addEventListener("click", handler);
-    const m1 = document.getElementById('move-1');
-    m1?.addEventListener("click", handler);
     const eDamaged = hurt(electrode, move.damage);
+    playerChoose = -1;
     if(eDamaged.hp < 0) return;
     battleSeq('cpu', pikachu, eDamaged);
 }
@@ -76,6 +76,9 @@ function Battle(props: BattleProps) {
     const battleWon = useGridStore(state => state.battleWon);
     const turn = useTurnStore(state => state.turn);
     const callHome = () => home(turn, battleWon, props.return);
+    const pikachu = useTurnStore(state => state.turn.pika);
+    const battleEnd = useBattleStore(state => state.end);
+    const stagingWrapper = () => staging(pikachu, battleEnd);
     return (
         <>
             <div>
@@ -83,11 +86,11 @@ function Battle(props: BattleProps) {
                 <button onClick={callHome}>Battle ended</button>
             </div>
             <div>
-                <button onClick={staging}>start battle</button>
+                <button onClick={stagingWrapper}>start battle</button>
             </div>
             <div>
-                <button id='move-0'>Thunderbolt</button>
-                <button id='move-1'>Protect</button>
+                <button onClick={moveZero}>Thunderbolt</button>
+                <button onClick={moveOne}>Protect</button>
             </div>
         </>
     );
