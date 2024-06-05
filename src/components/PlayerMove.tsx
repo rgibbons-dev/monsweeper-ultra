@@ -28,14 +28,13 @@ function PlayerMove(props: PlayerProps) {
         console.log(move.name);
         props.mutateElectrode(() => hurt(props.electrode, move.damage));
         console.log('electrode: ', props.electrode.hp);
-        if(props.electrode.hp <= 0) props.end(); // will electrode be updated?
+        if(props.electrode.hp <= 0) props.end();
         const cpuMoveIndex = Math.floor(Math.random() + 0.5);
         const cpuMove = props.electrode.moves[cpuMoveIndex];
         console.log(cpuMove.name);
         props.mutatePikachu(hurt(props.pikachu, cpuMove.damage));
         console.log('pikachu: ', props.pikachu.hp);
         if(props.pikachu.hp <= 0) props.end();
-        // need to update pikachu state in zustand store
     }   
     return(
         <>

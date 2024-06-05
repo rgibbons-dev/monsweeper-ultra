@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useBattleStore, useGridStore, useTurnStore } from "../store";
-import { Mon, Turn } from "../types";
+import { Mon } from "../types";
 import PlayerMove from "./PlayerMove";
 
 type BattleProps = {
@@ -8,17 +8,15 @@ type BattleProps = {
     return: (to: string) => void;
 };
 
-function home(turn: Turn, post: (turn: Turn) => void, route: (to: string) => void) {
-    post(turn);
-    route("/");
-}
-
 function Battle(props: BattleProps) {
     const msg = props.go ? 'Battle' : 'Ok';
 
     const battleWon = useGridStore(state => state.battleWon);
     const turn = useTurnStore(state => state.turn);
-    const callHome = () => home(turn, battleWon, props.return);
+    const callHome = () => {
+        battleWon(turn);
+        props.return("/");
+    };
     const ended = !useBattleStore(state => state.started);
     useEffect(() => {
         if(ended) callHome();
@@ -46,7 +44,6 @@ function Battle(props: BattleProps) {
         <>
             <div>
                 <div>{msg}</div>
-                <button onClick={callHome}>Battle ended</button>
             </div>
             <div>
                 <PlayerMove 
