@@ -92,11 +92,13 @@ type TurnState = {
 
 type TurnAction = {
     move: (d: number) => void;
+    mutate: (p: Mon) => void;
 };
 
 const useTurnStore = create<TurnState & TurnAction>((set) => ({
     turn: { pika: pikachu, currentSpace: 0 },
-    move: (distance: number) => set((state) => ({ turn: { ...state.turn, currentSpace: state.turn.currentSpace + distance } }))
+    move: (distance: number) => set((state) => ({ turn: { ...state.turn, currentSpace: state.turn.currentSpace + distance } })),
+    mutate: (updatedPikachu: Mon) => set((state) => ({ turn: { ...state.turn, pika: updatedPikachu } }))
 }));
 
 type BattleState = {

@@ -80,3 +80,6 @@
     - i'm consolidating the player and cpu turns into one function
         - in the elixir version, the battle sequence was a recursive fn
         - that was my original plan here, but i couldn't figure it out with react
+    - now i need to figure out how to do the end state
+        - i need to capture the pikachu in useState and update what is in zustand
+        - or maybe i should just be using the zustand state

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useBattleStore, useGridStore, useTurnStore } from "../store";
 import { Mon, Turn } from "../types";
 import PlayerMove from "./PlayerMove";
@@ -19,11 +19,14 @@ function Battle(props: BattleProps) {
     const battleWon = useGridStore(state => state.battleWon);
     const turn = useTurnStore(state => state.turn);
     const callHome = () => home(turn, battleWon, props.return);
+    const ended = !useBattleStore(state => state.started);
+    useEffect(() => {
+        if(ended) callHome();
+    }, [ended]);
 
     const pikachu = useTurnStore(state => state.turn.pika);
     const battleEnd = useBattleStore(state => state.end);
-
-    const [pika2, setPika2] = useState(pikachu);
+    const setPikachu = useTurnStore(state => state.mutate);
     const [electrode, setElectrode] = useState<Mon>({
         name: "electrode",
         hp: 200,
@@ -39,7 +42,6 @@ function Battle(props: BattleProps) {
         ],
         buff: false
     });
-
     return (
         <>
             <div>
@@ -50,18 +52,18 @@ function Battle(props: BattleProps) {
                 <PlayerMove 
                     name="thunderbolt"
                     moveIndex={0}
-                    pikachu={pika2} 
+                    pikachu={pikachu} 
                     electrode={electrode}
-                    mutatePikachu={setPika2}
+                    mutatePikachu={setPikachu}
                     mutateElectrode={setElectrode}
                     end={battleEnd}
                 />
                 <PlayerMove 
                     name="protect"
                     moveIndex={1}
-                    pikachu={pika2} 
+                    pikachu={pikachu} 
                     electrode={electrode}
-                    mutatePikachu={setPika2}
+                    mutatePikachu={setPikachu}
                     mutateElectrode={setElectrode}
                     end={battleEnd}
                 />
