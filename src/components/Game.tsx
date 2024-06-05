@@ -18,7 +18,7 @@ function Game() {
 
     const isBattleStarted = useBattleStore(state => state.started);
     const battleStart = useBattleStore(state => state.begin);
-    const [location, setLocation] = useLocation();
+    const [_location, setLocation] = useLocation();
     
 
     // check if a battle should be started or not

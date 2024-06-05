@@ -31,19 +31,23 @@ function Battle(props: BattleProps) {
         moves: [
             {
                 name: "Tackle",
-                damage: 40
+                damage: 20
             },
             {
-                name: "Tackle",
-                damage: 40
+                name: "Self-Destruct",
+                damage: 100
             }
         ],
         buff: false
     });
+    const [battleAction, setBattleAction] = useState("");
     return (
         <>
             <div>
                 <div>{msg}</div>
+            </div>
+            <div>
+                <p>{battleAction}</p>
             </div>
             <div>
                 <PlayerMove 
@@ -54,6 +58,7 @@ function Battle(props: BattleProps) {
                     mutatePikachu={setPikachu}
                     mutateElectrode={setElectrode}
                     end={battleEnd}
+                    displayAction={setBattleAction}
                 />
                 <PlayerMove 
                     name="protect"
@@ -63,6 +68,7 @@ function Battle(props: BattleProps) {
                     mutatePikachu={setPikachu}
                     mutateElectrode={setElectrode}
                     end={battleEnd}
+                    displayAction={setBattleAction}
                 />
             </div>
         </>
