@@ -27,12 +27,13 @@ function PlayerMove(props: PlayerProps) {
             move = props.pikachu.moves[1];
             props.pikachu.buff = true;
         }
-        props.mutateElectrode(() => hurt(props.electrode, move.damage));
         if(props.electrode.hp <= move.damage) {
-            props.end();
+            props.mutateElectrode(() => ({...props.electrode, hp: 0}));
             props.displayAction(() => `Pikachu used ${move.name}! Electrode took ${move.damage} and has fainted!`);
+            setTimeout(() => props.end(), 2000);
             return;
         } else {
+            props.mutateElectrode(() => hurt(props.electrode, move.damage));
             if(props.pikachu.buff) props.displayAction(() => `Pikachu used ${move.name}!`);
             else props.displayAction(() => `Pikachu used ${move.name}! Electrode took ${move.damage} and now has ${props.electrode.hp}HP remaining.`);
         }
@@ -40,11 +41,12 @@ function PlayerMove(props: PlayerProps) {
         setTimeout(() => {
             const cpuMoveIndex = Math.floor(Math.random() + 0.5);
             const cpuMove = props.electrode.moves[cpuMoveIndex];
-            props.mutatePikachu(hurt(props.pikachu, cpuMove.damage));
             if(props.pikachu.hp <= cpuMove.damage) {
-                props.end();
+                props.mutatePikachu({...props.pikachu, hp: 0});                
                 props.displayAction(() => `Electrode used ${cpuMove.name}! Pikachu took ${cpuMove.damage} and has fainted!`);
+                props.end();
             } else {
+                props.mutatePikachu(hurt(props.pikachu, cpuMove.damage));
                 if(props.pikachu.buff) props.displayAction(() => `Pikachu blocked the attack!`);
                 else props.displayAction(() => `Electrode used ${cpuMove.name}! Pikachu took ${cpuMove.damage} and now has ${props.pikachu.hp}HP remaining.`);
             }

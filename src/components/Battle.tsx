@@ -27,15 +27,15 @@ function Battle(props: BattleProps) {
     const setPikachu = useTurnStore(state => state.mutate);
     const [electrode, setElectrode] = useState<Mon>({
         name: "electrode",
-        hp: 200,
+        hp: 100,
         moves: [
             {
                 name: "Tackle",
                 damage: 20
             },
             {
-                name: "Self-Destruct",
-                damage: 100
+                name: "Explosion",
+                damage: 50
             }
         ],
         buff: false

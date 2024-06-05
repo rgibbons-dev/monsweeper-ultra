@@ -82,7 +82,7 @@ const pikachu: Mon = {
             damage: 0
         }
     ],
-    hp: 200,
+    hp: 300,
     buff: false
 };
 
