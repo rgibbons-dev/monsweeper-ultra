@@ -55,11 +55,11 @@ function removeElectrode(grid: Cell[][], turn: Turn) {
     })));
 }
 
-type GridState = {
+interface GridState {
     grid: Cell[][];
 };
 
-type GridAction = {
+interface GridAction {
     userMoved: (turn: Turn) => void;
     battleWon: (turn: Turn) => void;
 };
@@ -86,11 +86,11 @@ const pikachu: Mon = {
     buff: false
 };
 
-type TurnState = {
+interface TurnState {
     turn: Turn;
 };
 
-type TurnAction = {
+interface TurnAction {
     move: (d: number) => void;
     mutate: (p: Mon) => void;
 };
@@ -101,11 +101,11 @@ const useTurnStore = create<TurnState & TurnAction>((set) => ({
     mutate: (updatedPikachu: Mon) => set((state) => ({ turn: { ...state.turn, pika: updatedPikachu } }))
 }));
 
-type BattleState = {
+interface BattleState {
     started: boolean;
 };
 
-type BattleAction = {
+interface BattleAction {
     begin: () => void;
     end: () => void;
 };

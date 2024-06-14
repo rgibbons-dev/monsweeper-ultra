@@ -1,21 +1,21 @@
-type Move = {
+interface Move {
   name: string,
   damage: number
 };
 
-type Mon = {
+interface Mon {
   name: string;
   moves: Move[];
   hp: number;
   buff: boolean;
 };
 
-type Turn = {
+interface Turn {
   pika: Mon;
   currentSpace: number;
 };
 
-type Cell = {
+interface Cell {
   space: number;
   electrode: boolean;
   userPresent: boolean;
